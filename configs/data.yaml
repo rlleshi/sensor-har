@@ -11,7 +11,7 @@ pamap2:
   output_file: 'pamap2_106.h5'
   feature_columns: [ 1, 4, 5, 6, 10, 11, 12, 21, 22, 23, 27, 28, 29, 38, 39, 40, 44, 45, 46 ]
   window_size: 33
-  verbose: True
+  verbose: False
 
 opp:
   source: https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip

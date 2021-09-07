@@ -7,9 +7,9 @@ training:
   metrics: [ 'accuracy' ]
 
 zim:
-  batch_size: 128
-  d_model: 128
-  dropout: 0.2
+  batch_size: 32
+  d_model: 64
+  dropout: 0.5
   n_head: 4
 
 pamap2:
