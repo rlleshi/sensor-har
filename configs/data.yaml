@@ -11,6 +11,7 @@ pamap2:
   output_file: 'pamap2_106.h5'
   feature_columns: [ 1, 4, 5, 6, 10, 11, 12, 21, 22, 23, 27, 28, 29, 38, 39, 40, 44, 45, 46 ]
   window_size: 33
+  verbose: True
 
 opp:
   source: https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip
@@ -38,5 +39,12 @@ skoda:
   window_size: 49
 
 zim:
-  source:
-  destination: zim.zip
+  source: null
+  destination: zim_dance.zip
+  train_files: [ 'subject01.dat' ]
+  validation_files: [ 'subject02.dat' ]
+  test_files: [ 'subject03.dat' ]
+  output_file: 'zim_dance.h5'
+  feature_columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+  window_size: 33
+  verbose: True

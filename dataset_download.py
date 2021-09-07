@@ -4,6 +4,7 @@ import os
 import time
 import zipfile
 from tqdm import tqdm
+import sys
 
 import requests
 import yaml
@@ -53,6 +54,10 @@ if __name__ == "__main__":
 
     config_file = open('configs/data.yaml', mode='r')
     config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+    if config[args.dataset]['source'] is None:
+        print(f'Dataset {args.dataset} is not downloadable.')
+        sys.exit()
 
     get_dataset(url=config[args.dataset]['source'], data_directory=config['data_dir']['raw'],
                 file_name=config[args.dataset]['destination'], unzip=args.unzip)

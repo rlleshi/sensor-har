@@ -10,7 +10,7 @@ from ._data_reader import read_dataset
 from ._sliding_window import segment_pa2, segment_window_all
 
 
-def get_pamap2_data(verbose=False):
+def get_pamap2_data():
     config_file = open('configs/data.yaml', mode='r')
     data_config = yaml.load(config_file, Loader=yaml.FullLoader)
     config = data_config['pamap2']
@@ -19,12 +19,12 @@ def get_pamap2_data(verbose=False):
 
     train_test_files = {'train': config['train_files'],
                         'validation': config['validation_files'],
-                        'test': config['test_files']
-                        }
+                        'test': config['test_files']}
 
     read_dataset(train_test_files=train_test_files,
                  use_columns=config['feature_columns'],
-                 output_file_name=os.path.join(data_config['data_dir']['processed'], config['output_file']))
+                 output_file_name=os.path.join(data_config['data_dir']['processed'], config['output_file']),
+                 verbose=config['verbose'])
 
     path = os.path.join(data_config['data_dir']['processed'], config['output_file'])
     f = h5py.File(path, 'r')
@@ -38,7 +38,7 @@ def get_pamap2_data(verbose=False):
     x_test = f.get('test').get('inputs')[()]
     y_test = f.get('test').get('targets')[()]
 
-    if verbose:
+    if config['verbose']:
         print("x_train shape = ", x_train.shape)
         print("y_train shape =", y_train.shape)
 
@@ -55,7 +55,7 @@ def get_pamap2_data(verbose=False):
     x_test = x_test[::3, :]
     y_test = y_test[::3]
 
-    if verbose:
+    if config['verbose']:
         print("x_train shape(downsampled) = ", x_train.shape)
         print("y_train shape(downsampled) =", y_train.shape)
         print("x_val shape(downsampled) = ", x_val.shape)
@@ -73,7 +73,7 @@ def get_pamap2_data(verbose=False):
     val_x, val_y = segment_pa2(x_val, y_val, config['window_size'], n_sensor_val)
     test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
 
-    if verbose:
+    if config['verbose']:
         print("train_x shape =", train_x.shape)
         print("train_y shape =", train_y.shape)
         print('train_y distribution', np.unique(train_y, return_counts=True))
@@ -90,7 +90,7 @@ def get_pamap2_data(verbose=False):
     test_y = tf.keras.utils.to_categorical(test_y, num_classes=19)
     val_y = tf.keras.utils.to_categorical(val_y, num_classes=19)
 
-    if verbose:
+    if config['verbose']:
         print("unique test_y", np.unique(test_y))
         print("unique train_y", np.unique(train_y))
         print("test_y[1]=", test_y[1])

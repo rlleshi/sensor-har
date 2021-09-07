@@ -1,4 +1,5 @@
 import os
+import os.path as osp
 import sys
 import warnings
 
@@ -9,8 +10,9 @@ warnings.filterwarnings("ignore")
 
 
 def test_model(dataset: str, model_config, test_x):
-    if os.path.exists(os.path.join(model_config['dirs']['saved_models'], dataset)):
-        model = tf.keras.models.load_model(os.path.join(model_config['dirs']['saved_models'], dataset))
+    if osp.exists(osp.join(model_config['dirs']['saved_models'], dataset)):
+        model = tf.keras.models.load_model(
+            osp.join(model_config['dirs']['saved_models'], dataset))
     else:
         print('PLEASE, TRAIN THE MODEL FIRST OR PUT PRETRAINED MODEL IN "saved_model" DIRECTORY')
         return

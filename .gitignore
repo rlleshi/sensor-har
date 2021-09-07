@@ -129,5 +129,9 @@ dmypy.json
 .pyre/
 .idea/
 
-data/
+# data
+data/processed/
+data/raw/
 
+# models
+saved_model/zim/

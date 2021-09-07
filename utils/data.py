@@ -5,9 +5,10 @@ from preprocess.opp.data_loader import get_opp_data
 from preprocess.pamap2.data_loader import get_pamap2_data
 from preprocess.skoda.data_loader import get_skoda_data
 from preprocess.uschad.data_loader import get_uschad_data
+from preprocess.zim_dance.data_loader import get_zim_data
 
-sys.path.append("../")
-warnings.filterwarnings("ignore")
+sys.path.append('../')
+warnings.filterwarnings('ignore')
 
 
 def get_data(dataset: str):
@@ -15,7 +16,6 @@ def get_data(dataset: str):
 
     if dataset == 'pamap2':
         (train_x, train_y), (val_x, val_y), (test_x, test_y), y_test = get_pamap2_data()
-
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     elif dataset == 'skoda':
@@ -28,3 +28,7 @@ def get_data(dataset: str):
 
     elif dataset == 'uschad':
         return get_uschad_data()
+
+    elif dataset == 'zim':
+        (train_x, train_y), (val_x, val_y), (test_x, test_y) = get_zim_data()
+        return train_x, train_y, val_x, val_y, test_x, test_y
