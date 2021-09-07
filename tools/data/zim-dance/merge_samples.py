@@ -8,7 +8,6 @@ from tqdm import tqdm
 from pathlib import Path
 
 
-ANNOTATIONS = 'data/annotations/zim-dance-10.txt'
 LABEL_TO_NUMBER = {}
 
 
@@ -24,6 +23,11 @@ def parse_args():
         type=str,
         default='data/raw/zim-dance/merged/subjectXY.dat',
         help='resulting file')
+    parser.add_argument(
+        '--ann',
+        type=str,
+        default='data/annotations/zim-dance-10.txt',
+        help='annotation file')
     args = parser.parse_args()
     return args
 
@@ -32,7 +36,7 @@ def main():
     args = parse_args()
     Path(args.out.rsplit('/', 1)[0]).mkdir(parents=True, exist_ok=True)
     global LABEL_TO_NUMBER
-    with open(ANNOTATIONS) as ann:
+    with open(args.ann, 'r') as ann:
         for line in ann:
             (val, key) = line.split(' ', 1)
             LABEL_TO_NUMBER[key.strip()] = int(val)
