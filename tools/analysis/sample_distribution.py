@@ -13,8 +13,6 @@ from rich.console import Console
 
 DATASET = 'zim'
 CONSOLE = Console()
-NUMBER_TO_LABEL = {}
-
 
 def parse_args():
     parser = ArgumentParser(prog='analysis of sample distribution')
@@ -65,12 +63,13 @@ def main():
     data_config = yaml.load(config_file, Loader=yaml.FullLoader)
     config = data_config[DATASET]
 
-    global LABEL_TO_NUMBER
+    number_to_label = {}
     with open(args.ann) as ann:
         for line in ann:
             (val, key) = line.split(' ', 1)
-            NUMBER_TO_LABEL[val] = key.strip()
-    result = {key: 0 for key in NUMBER_TO_LABEL.keys()}
+            number_to_label[val] = key.strip()
+
+    result = {key: 0 for key in number_to_label.keys()}
 
     for data in tqdm(config['train_files'] + \
                 config['validation_files'] + \
@@ -84,7 +83,7 @@ def main():
             for row in csv_reader:
                 result[row[0]] +=1
 
-    result = {NUMBER_TO_LABEL[k]: v for k, v in result.items()}
+    result = {number_to_label[k]: v for k, v in result.items()}
     save_result(args.out_dir, result)
 
 

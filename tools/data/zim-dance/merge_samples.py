@@ -16,12 +16,13 @@ def clean(str):
 
 
 def parse_args():
-    parser = ArgumentParser(prog='merge samples into 1 data file per subject')
+    parser = ArgumentParser(
+        prog='merge single samples (all classes) of one into 1 data file')
     parser.add_argument('in_dir', type=str, help='directory of samples')
     parser.add_argument(
         '--out',
         type=str,
-        default='data/raw/zim-dance/merged/subjectXY.dat',
+        default='data/raw/zim_dance/merged/subjectXY.dat',
         help='resulting file')
     parser.add_argument(
         '--ann',

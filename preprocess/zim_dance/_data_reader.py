@@ -11,7 +11,7 @@ plt.style.use('ggplot')
 
 class data_reader:
     ANN_FILE_PATH = 'data/annotations/zim-dance-10.txt'
-    DATA_PATH = 'data/raw/zim-dance/merged/'
+    DATA_PATH = 'data/raw/zim_dance/merged/'
 
     def __init__(self, train_test_files, use_columns, output_file_name, verbose):
         if not osp.exists(output_file_name):
@@ -67,7 +67,7 @@ class data_reader:
                     elem = []
                     for ind in cols:
                         elem.append(line[ind])
-                    data.append([float(x) / 1000 for x in elem[1:]])
+                    data.append([float(x) / 1000 for x in elem[:-1]])
                     labels.append(labelToId[elem[0]])
 
         return {'inputs': np.asarray(data), 'targets': np.asarray(labels, dtype=int)}
