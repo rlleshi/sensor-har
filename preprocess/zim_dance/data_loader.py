@@ -20,8 +20,7 @@ def get_zim_data():
 
     train_test_files = {'train': config['train_files'],
                         'validation': config['validation_files'],
-                        'test': config['test_files']
-                        }
+                        'test': config['test_files']}
 
     read_dataset(train_test_files=train_test_files,
                  use_columns=config['feature_columns'],

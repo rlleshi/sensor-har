@@ -44,7 +44,7 @@ def save_result(out, result, label):
 
     # save json
     keys = [int(k) for k in result.keys()]
-    result['min'] = min(keys)
+    result['min'] = min([k for k in keys if k > 30])
     result['max'] = max(keys)
     result_json = json.dumps(result, indent=4)
     f = open(osp.join(out, 'sample_len_dist.json'), 'w')
