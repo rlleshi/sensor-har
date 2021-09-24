@@ -1,5 +1,7 @@
 import json
 import yaml
+import os
+import os.path as osp
 
 import tensorflow as tf
 import numpy as np
@@ -7,7 +9,9 @@ import numpy as np
 from argparse import ArgumentParser
 from pathlib import Path
 from sklearn.metrics import accuracy_score
+from rich.console import Console
 
+CONSOLE = Console()
 
 def segment_window_all(x_train, y_train, window_size, n_sensor_val):
     window_segments = np.zeros((len(x_train), window_size, n_sensor_val))
@@ -35,7 +39,9 @@ def clean(str):
 
 def parse_args():
     parser = ArgumentParser(prog='get prediction for single sample')
-    parser.add_argument('sample_path', type=str, help='path to sample')
+    parser.add_argument('path',
+        type=str,
+        help='path to sample or dir')
     parser.add_argument(
         '--model-dir',
         type=str,
@@ -63,6 +69,7 @@ def main():
     config = data_config['zim']
     model_file = open('configs/model.yaml', 'r')
     model_config = yaml.load(model_file, Loader=yaml.FullLoader)
+    model = tf.keras.models.load_model(args.model_dir)
 
     # data pre-processing
     label_to_number = {}
@@ -71,35 +78,48 @@ def main():
             (val, key) = line.split(' ', 1)
             label_to_number[key.strip()] = int(val)
 
-    label = clean(args.sample_path.split('/')[-1].split('2021')[0])
-    activity_id = label_to_number.get(label.strip(), None)
+    to_process = []
+    if osp.isdir(args.path):
+        to_process += os.listdir(args.path)
+    else:
+        to_process.append(args.path.split('/')[-1])
+        args.path = '/'.join(p for p in args.path.split('/')[:-1])
 
-    x_test = []
-    y_test = []
+    CONSOLE.print(to_process, style='green')
+    CONSOLE.print(args.path, style='green')
 
-    content = open(args.sample_path, 'r')
-    content = json.load(content)
-    for row in content:
-        result = [activity_id]
-        result.extend([x for x in row])
-        x_test.append([float(x) / 1000 for x in result[:-1]])
-        y_test.append(result[0])
+    for sample in to_process:
+        label = clean(sample.split('2021')[0])
+        activity_id = label_to_number.get(label.strip(), None)
+        x_test = []
+        y_test = []
 
-    n_sensor_val = len(config['feature_columns']) - 1
-    # replace any nan with mean
-    x_test = np.where(
-        np.isnan(x_test),
-        np.ma.array(x_test, mask=np.isnan(x_test)).mean(axis=0), x_test)
+        content = open(osp.join(args.path, sample), 'r')
+        try:
+            content = json.load(content)
+        except:
+            continue
 
-    # window
-    test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
-    test_y = tf.keras.utils.to_categorical(test_y)
+        for row in content:
+            result = [activity_id]
+            result.extend([x for x in row])
+            x_test.append([float(x) / 1000 for x in result[:-1]])
+            y_test.append(result[0])
 
-    # predict
-    model = tf.keras.models.load_model(args.model_dir)
-    pred = model.predict(test_x, batch_size=model_config['zim']['batch_size'], verbose=1)
-    acc = accuracy_score(np.argmax(test_y, axis=1), np.argmax(pred, axis=1), normalize=True)
-    print(f'The model is {round(100*acc, 2)}% confident that this sample is {label}')
+        n_sensor_val = len(config['feature_columns']) - 1
+        # replace any nan with mean
+        x_test = np.where(
+            np.isnan(x_test),
+            np.ma.array(x_test, mask=np.isnan(x_test)).mean(axis=0), x_test)
+
+        # window
+        test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
+        test_y = tf.keras.utils.to_categorical(test_y)
+
+        # predict
+        pred = model.predict(test_x, batch_size=model_config['zim']['batch_size'], verbose=1)
+        acc = accuracy_score(np.argmax(test_y, axis=1), np.argmax(pred, axis=1), normalize=True)
+        print(f'The model is {round(100*acc, 2)}% confident that this sample is {label}')
 
 
 if __name__ == '__main__':

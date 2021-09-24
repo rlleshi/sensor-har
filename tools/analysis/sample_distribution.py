@@ -15,7 +15,8 @@ DATASET = 'zim'
 CONSOLE = Console()
 
 def parse_args():
-    parser = ArgumentParser(prog='analysis of sample distribution')
+    parser = ArgumentParser(
+        prog='analysis of sample distribution for processed samples')
     parser.add_argument(
         '--out-dir',
         type=str,
@@ -39,7 +40,7 @@ def save_result(out, result):
     # save json
     result['total'] = tot
     result_json = json.dumps(result, indent=4)
-    f = open(osp.join(out, 'zim_classes_distribution.json'), 'w')
+    f = open(osp.join(out, 'zim_classes_dist.json'), 'w')
     print(result_json, file=f)
     f.close()
 
@@ -53,7 +54,7 @@ def save_result(out, result):
     fig.set_xlabel('Class', fontsize=30)
     fig.set_ylabel('Value', fontsize=20)
     output = fig.get_figure()
-    output.savefig(osp.join(out, 'zim_classes_distribution.svg'))
+    output.savefig(osp.join(out, 'zim_classes_dist.svg'))
 
 
 def main():
@@ -76,7 +77,7 @@ def main():
                 config['test_files']):
         path = osp.join(data_config['data_dir']['raw'],
                         DATASET, 'merged', data)
-        # CONSOLE.print(f'Examining {path}...', style='bold yellow')
+        # CONSOLE.print(f'Examining {path}...', style='green')
 
         with open(path, mode='r') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=' ')

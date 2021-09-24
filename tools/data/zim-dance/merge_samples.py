@@ -6,9 +6,10 @@ import os.path as osp
 from argparse import ArgumentParser
 from tqdm import tqdm
 from pathlib import Path
-
+from rich.console import Console
 
 LABEL_TO_NUMBER = {}
+CONSOLE = Console()
 
 
 def clean(str):
@@ -51,6 +52,7 @@ def main():
             content = open(osp.join(args.in_dir, file), 'r')
             content = json.load(content)
 
+            CONSOLE.print(len(content), style='green')
             for row in content:
                 result = [activity_id]
                 result.extend([x for x in row])
