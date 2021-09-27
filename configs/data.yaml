@@ -41,8 +41,8 @@ skoda:
 zim:
   source: null
   destination: zim_dance.zip
-  train_files: [ 'subject01.dat' ]
-  validation_files: [ 'subject02.dat', 'subject03.dat' ]
+  train_files: [ 'subject01.dat', 'subject02.dat' ]
+  validation_files: [ 'subject03.dat' ]
   test_files: [ 'subject04.dat', 'subject05.dat' ]
   output_file: 'zim_dance.h5'
   feature_columns: [ 0, 1, 2, 3, 4, 5, 6 ]
