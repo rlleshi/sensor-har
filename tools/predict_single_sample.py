@@ -85,8 +85,8 @@ def main():
         to_process.append(args.path.split('/')[-1])
         args.path = '/'.join(p for p in args.path.split('/')[:-1])
 
-    CONSOLE.print(to_process, style='green')
-    CONSOLE.print(args.path, style='green')
+    # CONSOLE.print(to_process, style='green')
+    # CONSOLE.print(args.path, style='green')
 
     for sample in to_process:
         label = clean(sample.split('2021')[0])
@@ -103,7 +103,7 @@ def main():
         for row in content:
             result = [activity_id]
             result.extend([x for x in row])
-            x_test.append([float(x) / 1000 for x in result[:-1]])
+            x_test.append([float(x) / 100 for x in result[:-1]])
             y_test.append(result[0])
 
         n_sensor_val = len(config['feature_columns']) - 1

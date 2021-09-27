@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument(
         '--out',
         type=str,
-        default='data/raw/zim_dance/merged/subjectXY.dat',
+        default='data/raw/zim/merged/subjectXY.dat',
         help='resulting file')
     parser.add_argument(
         '--ann',
@@ -61,7 +61,8 @@ def main():
 
             lower_b, upper_b = data_config[f'class_{activity_id}']
             if (len(content) < lower_b) | (len(content) > upper_b):
-                # CONSOLE.print(f'Skipping {file} with len {len(content)}', style='yellow')
+                # CONSOLE.print(f'Skipping {file} with len {len(content)}',
+                #     f'Out of Bounds {lower_b} - {upper_b}', style='yellow')
                 skip_count += 1
                 continue
 
