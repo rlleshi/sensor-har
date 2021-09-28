@@ -103,7 +103,7 @@ def main():
         for row in content:
             result = [activity_id]
             result.extend([x for x in row])
-            x_test.append([float(x) / 100 for x in result[:-1]])
+            x_test.append([float(x) / 10 for x in result[1:]])
             y_test.append(result[0])
 
         n_sensor_val = len(config['feature_columns']) - 1
@@ -117,9 +117,17 @@ def main():
         test_y = tf.keras.utils.to_categorical(test_y)
 
         # predict
-        pred = model.predict(test_x, batch_size=model_config['zim']['batch_size'], verbose=1)
-        acc = accuracy_score(np.argmax(test_y, axis=1), np.argmax(pred, axis=1), normalize=True)
-        print(f'The model is {round(100*acc, 2)}% confident that this sample is {label}')
+        pred = model.predict(
+            test_x,
+            batch_size=model_config['zim']['batch_size'],
+            verbose=1)
+        acc = accuracy_score(
+            np.argmax(test_y, axis=1),
+            np.argmax(pred, axis=1),
+            normalize=True)
+        print(sample)
+        CONSOLE.print(f'The model is {round(100*acc, 2)}% confident '
+                    f'that this sample is {label}', style='green')
 
 
 if __name__ == '__main__':

@@ -4,7 +4,6 @@ import string
 import pandas as pd
 import seaborn as sns
 import os.path as osp
-import matplotlib.pyplot as plt
 import random as rd
 
 from argparse import ArgumentParser

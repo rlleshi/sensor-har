@@ -25,7 +25,7 @@ def parse_args():
         help='Testing Mode')
     parser.add_argument(
         '--epochs',
-        default=100,
+        default=150,
         type=int,
         help='Number of Epochs for Training')
     parser.add_argument(
