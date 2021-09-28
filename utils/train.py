@@ -29,7 +29,7 @@ def train_model(dataset: str, model_config, train_x, train_y, val_x, val_y, epoc
     earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=15, verbose=1, mode='max')
     reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss',
                                                           factor=0.1,
-                                                          patience=8, # ? modify
+                                                          patience=10, # ? modify
                                                           verbose=1,
                                                           min_delta=1e-4,
                                                           mode='min')

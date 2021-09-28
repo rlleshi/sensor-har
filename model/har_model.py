@@ -5,6 +5,9 @@ from .self_attention.encoder import EncoderLayer
 from .self_attention.positional_encoding import PositionalEncoding
 from .sensor_attention import SensorAttention
 
+from rich.console import Console
+CONSOLE = Console()
+
 
 def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4, dropout_rate=0.2, use_pe=True):
     """ This is a self-attention based model. It utilizes sensor modality attention,
@@ -22,8 +25,12 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
         order of samples into account.
 
         After the representation is scaled by square_root(d), it is passed to the self-attention blocks."""
-    print('===== Model Params =====')
-    print(n_timesteps, n_features, n_outputs, _dff, d_model, nh, dropout_rate, use_pe)
+
+    CONSOLE.print('=====     Hyperparameters     =====', style='green')
+    CONSOLE.print(f'Time steps: {n_timesteps}; Number Features: {n_features}'
+                f' Number Outputs: {n_outputs}; D Model: {d_model}'
+                f' Number Heads: {nh}; Dropout: {dropout_rate}'
+                f' Positional Encoding: {use_pe}', style='green')
 
     inputs = tf.keras.layers.Input(shape=(n_timesteps, n_features,))
 

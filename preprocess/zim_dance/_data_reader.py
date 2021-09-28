@@ -5,7 +5,10 @@ import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
+from rich.console import Console
+
 plt.style.use('ggplot')
+CONSOLE = Console()
 
 
 class data_reader:
@@ -17,6 +20,7 @@ class data_reader:
             self.data, self.idToLabel = self.read_zim(train_test_files, use_columns, verbose)
             self.save_data(output_file_name)
 
+
     def save_data(self, output_file_name):
         with h5py.File(output_file_name, 'w') as f:
             for key in self.data:
@@ -24,13 +28,22 @@ class data_reader:
                 for field in self.data[key]:
                     f[key].create_dataset(field, data=self.data[key][field])
 
+
+    def normalize(self, x):
+        "Min-Max normalization"
+        min_val, max_val = -1, 1
+        return (x - min_val) / (max_val - min_val)
+
+
     @property
     def train(self):
         return self.data['train']
 
+
     @property
     def test(self):
         return self.data['test']
+
 
     def read_zim(self, train_test_files, use_columns, verbose):
         files = train_test_files
@@ -66,9 +79,8 @@ class data_reader:
                     elem = []
                     for ind in cols:
                         elem.append(line[ind])
-                    # print(elem)
-                    # print([float(x) / 1000 for x in elem[:-1]])
-                    data.append([float(x) / 100 for x in elem[1:]])
+
+                    data.append([float(x) / 10 for x in elem[1:]])
                     labels.append(labelToId[elem[0]])
 
         return {'inputs': np.asarray(data), 'targets': np.asarray(labels, dtype=int)}
