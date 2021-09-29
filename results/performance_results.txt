@@ -1,0 +1,8 @@
+1) With Positional Encoding
+Epoch 93/150
+23/23 [==============================] - 4s 196ms/step - loss: 0.1286 - accuracy: 0.9561 - val_loss: 0.5261 - val_accuracy: 0.8653 --> including the commented out layers
+
+
+2) W/o Positional Encoding
+Epoch 57/150
+24/24 [==============================] - 5s 225ms/step - loss: 0.0566 - accuracy: 0.9842 - val_loss: 0.3654 - val_accuracy: 0.9247 --> window size of 30

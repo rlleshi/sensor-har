@@ -134,7 +134,7 @@ data/processed/
 data/raw/
 
 # models
-saved_model/zim/
+# saved_model/zim/
 
 # results
 results/sample_distribution/zim
