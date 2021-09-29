@@ -15,6 +15,7 @@ class SensorAttention(tf.keras.layers.Layer):
 
     def call(self, x):
         # reshape input to produce single channel image
+        # apply normalization that keeps mean close to 0 & S.D close to 1
         x = self.ln(x)
         x1 = tf.expand_dims(x, axis=3)
         x1 = self.conv_f(x1)

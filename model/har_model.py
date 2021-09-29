@@ -9,7 +9,7 @@ from rich.console import Console
 CONSOLE = Console()
 
 
-def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4, dropout_rate=0.2, use_pe=True):
+def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4, dropout_rate=0.2, use_pe=False):
     """ This is a self-attention based model. It utilizes sensor modality attention,
         self-attention blocks and global temporal attention.
 
@@ -24,7 +24,16 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
         cosine functions to the obtained `d` size vectors. This enables the model to take the temporal
         order of samples into account.
 
-        After the representation is scaled by square_root(d), it is passed to the self-attention blocks."""
+        After the representation is scaled by square_root(d), it is passed to the self-attention blocks.
+
+        These self-attention blocks use dot product-based attention score to transform the feature values
+        for each timestamp.
+
+        Finally, the representation generated from the self attention blocks is used by the global
+        temporal attention layer. This layer learns parameters to set varying attention across the
+        temporal dimension to generate the final representation which is used by the final fully
+        connected and softmax layers."""
+
 
     CONSOLE.print('=====     Hyperparameters     =====', style='green')
     CONSOLE.print(f'Time steps: {n_timesteps}; Number Features: {n_features}'
@@ -34,13 +43,14 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
 
     inputs = tf.keras.layers.Input(shape=(n_timesteps, n_features,))
 
-    si, _ = SensorAttention(n_filters=128, kernel_size=3, dilation_rate=2)(inputs)
+    si, _ = SensorAttention(n_filters=256, kernel_size=5, dilation_rate=2)(inputs)
 
     x = tf.keras.layers.Conv1D(d_model, 1, activation='relu')(si)
 
     if use_pe:
         x = PositionalEncoding(n_timesteps, d_model)(x)
 
+    # add self-attention layers
     x = EncoderLayer(d_model=d_model, num_heads=nh, dff=_dff, rate=dropout_rate)(x)
     x = EncoderLayer(d_model=d_model, num_heads=nh, dff=_dff, rate=dropout_rate)(x)
     # x = tf.keras.layers.GlobalAveragePooling1D()(x)

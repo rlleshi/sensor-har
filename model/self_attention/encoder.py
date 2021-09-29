@@ -10,6 +10,11 @@ def point_wise_feed_forward_network(d_model, dff):
 
 
 class EncoderLayer(tf.keras.layers.Layer):
+    """ Each `self attention block` consists of two layers: multi-headed self-attention
+        and position-wise feed forward layer. Self-attention can determine relative weights
+        for each time-step in the sequence by considering its similarity to all the other
+        time-steps.
+    """
     def __init__(self, d_model, num_heads, dff, rate=0.1):
         super(EncoderLayer, self).__init__()
 
