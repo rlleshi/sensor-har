@@ -4,7 +4,10 @@ import tensorflow as tf
 class SensorAttention(tf.keras.layers.Layer):
     """ Captures the varing levels of contribution from sensors at different modalities
         for classification. E.g. to recognize 'ironing', the sensors at the subject's ankle
-        do not provide much insight."""
+        do not provide much insight.
+
+        For the zim-dance task this layer is pretty much irrelevant
+        """
 
     def __init__(self, n_filters, kernel_size, dilation_rate):
         super(SensorAttention, self).__init__()

@@ -1,7 +1,5 @@
-import csv
 import os
 import os.path as osp
-import yaml
 import json
 import pandas as pd
 import seaborn as sns
@@ -23,15 +21,16 @@ def parse_args():
     parser = ArgumentParser(prog='analysis of sample length distribution')
     parser.add_argument('in_dir', help='directory with raw json files')
     parser.add_argument(
-        '--out-dir',
-        type=str,
-        default=f'results/sample_len/{DATASET}',
-        help='out dir to save results')
-    parser.add_argument(
         '--ann',
         type=str,
         default='data/annotations/zim-dance-10.txt',
         help='annotation file')
+    parser.add_argument(
+        '--dataset',
+        type=str,
+        default='zim',
+        choices=['zim'],
+        help='dataset')
     args = parser.parse_args()
     return args
 
@@ -64,13 +63,14 @@ def save_result(out, result, label):
 
 def main():
     args = parse_args()
+    out_dir = osp.join('results/sample_len/', args.dataset)
     labels = []
     with open(args.ann, 'r') as ann:
         for line in ann:
             _, label = line.split(' ', 1)
             labels.append(label.strip())
     for label in labels:
-        Path(osp.join(args.out_dir, label)).mkdir(parents=True, exist_ok=True)
+        Path(osp.join(out_dir, label)).mkdir(parents=True, exist_ok=True)
 
     for label in labels:
         result = {}
@@ -88,12 +88,12 @@ def main():
             #     if length == 103:
             #         CONSOLE.print(file, style='green')
 
-            if result.get(length, None) == None:
+            if result.get(length, None) is None:
                 result[length] = 1
             else:
                 result[length] += 1
 
-        save_result(osp.join(args.out_dir, label), result, label)
+        save_result(osp.join(out_dir, label), result, label)
 
 
 if __name__ == '__main__':

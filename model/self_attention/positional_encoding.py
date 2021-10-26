@@ -4,7 +4,8 @@ import tensorflow as tf
 
 class PositionalEncoding(tf.keras.layers.Layer):
     """ A layer used in Transformer architecture that gives the order context
-        to the non-recurrent architecture of multi-head attention.
+        to the non-recurrent architecture of multi-head attention. In other words this
+        layer seems to be crucial for ordering time series data.
 
         Basically, when recurrent networks are fed with sequence input, the sequential order
         (ordering of time-steps) is implicitly defined by the input.

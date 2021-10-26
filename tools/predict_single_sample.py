@@ -39,7 +39,8 @@ def clean(str):
 
 def parse_args():
     parser = ArgumentParser(prog='get prediction for single sample')
-    parser.add_argument('path',
+    parser.add_argument(
+        'path',
         type=str,
         help='path to sample or dir')
     parser.add_argument(
