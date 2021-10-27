@@ -54,15 +54,15 @@ def main():
         for file in tqdm(os.listdir(args.in_dir)):
             label = clean(file.split('2021')[0])
             activity_id = LABEL_TO_NUMBER.get(label.strip(), None)
-            if activity_id == None:
+            if activity_id is None:
                 continue
             content = open(osp.join(args.in_dir, file), 'r')
             content = json.load(content)
 
             lower_b, upper_b = data_config[f'class_{activity_id}']
             if (len(content) < lower_b) | (len(content) > upper_b):
-                # CONSOLE.print(f'Skipping {file} with len {len(content)}',
-                #     f'Out of Bounds {lower_b} - {upper_b}', style='yellow')
+                CONSOLE.print(f'Skipping {file} with len {len(content)}',
+                    f'Out of Bounds {lower_b} - {upper_b}', style='yellow')
                 skip_count += 1
                 continue
 

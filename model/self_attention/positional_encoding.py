@@ -2,18 +2,21 @@ import tensorflow as tf
 
 # https://keras.io/guides/making_new_layers_and_models_via_subclassing/
 
+
 class PositionalEncoding(tf.keras.layers.Layer):
     """ A layer used in Transformer architecture that gives the order context
-        to the non-recurrent architecture of multi-head attention. In other words this
-        layer seems to be crucial for ordering time series data.
+        to the non-recurrent architecture of multi-head attention. In other
+        words this layer seems to be crucial for ordering time series data.
 
-        Basically, when recurrent networks are fed with sequence input, the sequential order
-        (ordering of time-steps) is implicitly defined by the input.
-        However, the Multi-Head Attention layer in the Transformer is a feed-forward layer
-        that reads a whole sequence at once. As the attention is computed on each data point
-        (time-step) independently, the context of ordering between data points is simply lost
-        and the attention is invariant to the sequence order. (same holds for CNN)
-        Hence we need this layer to take care of the sequential nature of time-series data
+        Basically, when recurrent networks are fed with sequence input, the
+        sequential order (ordering of time-steps) is implicitly defined by the
+        input. However, the Multi-Head Attention layer in the Transformer is a
+        feed-forward layer that reads a whole sequence at once. As the
+        attention is computed on each data point (time-step) independently,
+        the context of ordering between data points is simply lost and the
+        attention is invariant to the sequence order. (same holds for CNN)
+        Hence we need this layer to take care of the sequential nature of
+        time-series data
 
         https://medium.com/@j.ali.hab/on-positional-encodings-in-the-attention-mechanism-ee81e6076b62
     """

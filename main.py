@@ -1,3 +1,4 @@
+import os
 import argparse
 import warnings
 
@@ -35,12 +36,20 @@ def parse_args():
         default='zim',
         type=str,
         help='Name of Dataset for Model Training')
+    parser.add_argument(
+        '--use-gpu',
+        action='store_true',
+        help='whether to use GPU or not')
     args = parser.parse_args()
     return args
 
 
 def main():
     args = parse_args()
+    if not args.use_gpu:
+        CONSOLE.print('Not using GPU', style='bold yellow')
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
     model_config_file = open('configs/model.yaml', mode='r')
     model_cfg = yaml.load(model_config_file, Loader=yaml.FullLoader)
     train_x, train_y, val_x, val_y, test_x, test_y = get_data(dataset=args.dataset)

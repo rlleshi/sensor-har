@@ -12,6 +12,7 @@ from rich.console import Console
 
 CONSOLE = Console()
 
+
 def parse_args():
     parser = ArgumentParser(
         prog='analysis of sample distribution for processed samples')
