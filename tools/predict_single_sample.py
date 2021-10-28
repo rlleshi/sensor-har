@@ -56,7 +56,7 @@ def parse_args():
     parser.add_argument(
         '--out-dir',
         type=str,
-        default='data/raw/zim_dance/single_test',
+        default='data/raw/zim/single_test',
         help='out dir to save processed sample')
     args = parser.parse_args()
     return args
@@ -64,6 +64,9 @@ def parse_args():
 
 def main():
     args = parse_args()
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
     Path(args.out_dir).mkdir(parents=True, exist_ok=True)
     config_file = open('configs/data.yaml', 'r')
     data_config = yaml.load(config_file, Loader=yaml.FullLoader)

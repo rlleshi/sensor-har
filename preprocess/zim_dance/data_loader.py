@@ -9,6 +9,10 @@ import yaml
 from pathlib import Path
 from ._data_reader import read_dataset
 from ._sliding_window import segment_pa2, segment_window_all
+from rich.console import Console
+
+
+CONSOLE = Console()
 
 
 def get_zim_data():
@@ -44,7 +48,7 @@ def get_zim_data():
     y_test = f.get('test').get('targets')[()]
 
     if config['verbose']:
-        print('=====\n\n')
+        CONSOLE.print('=====\n\n', style='bold green')
         print("x_train shape = ", x_train.shape)
         print("y_train shape =", y_train.shape)
 
@@ -53,7 +57,7 @@ def get_zim_data():
 
         print("x_test shape =", x_test.shape)
         print("y_test shape =", y_test.shape)
-        print('\n\n=====')
+        CONSOLE.print('\n\n=====', style='bold green')
 
     # replace nan with mean
     x_train = np.where(
@@ -72,7 +76,7 @@ def get_zim_data():
     test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
 
     if config['verbose']:
-        print('=====\n\n')
+        CONSOLE.print('=====\n\n', style='bold green')
         print(f'Number of sensors: {n_sensor_val}')
 
         print("train_x shape =", train_x.shape)
@@ -86,14 +90,14 @@ def get_zim_data():
         print("test_x shape =", test_x.shape)
         print("test_y shape =", test_y.shape)
         print('test_y distribution', np.unique(test_y, return_counts=True))
-        print('\n\n=====')
+        CONSOLE.print('\n\n=====', style='bold green')
 
     train_y = tf.keras.utils.to_categorical(train_y)
     test_y = tf.keras.utils.to_categorical(test_y)
     val_y = tf.keras.utils.to_categorical(val_y)
 
     if config['verbose']:
-        print('=====\n\n')
+        CONSOLE.print('=====\n\n', style='bold green')
         print("unique test_y", np.unique(test_y))
         print("unique train_y", np.unique(train_y))
         print("test_y[1]=", test_y[1])
@@ -101,6 +105,6 @@ def get_zim_data():
         print("train_y shape(1-hot) =", train_y.shape)
         print("val_y shape(1-hot) =", val_y.shape)
         print("test_y shape(1-hot) =", test_y.shape)
-        print('\n\n=====')
+        CONSOLE.print('\n\n=====', style='bold green')
 
     return (train_x, train_y), (val_x, val_y), (test_x, test_y)

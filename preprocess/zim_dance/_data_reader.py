@@ -56,11 +56,11 @@ class data_reader:
         labelToId = {str(x[0]): i for i, x in enumerate(label_map)}
         idToLabel = [x[1] for x in label_map]
         if verbose:
-            print('\n =====   Label maps   =====\n')
+            CONSOLE.print('\n =====   Label maps   =====\n', style='green')
             print(label_map)
-            print('\n =====   Label to Id   =====\n')
+            CONSOLE.print('\n =====   Label to Id   =====\n', style='green')
             print(labelToId)
-            print('\n =====   Id to Label   =====\n')
+            CONSOLE.print('\n =====   Id to Label   =====\n', style='green')
             print(idToLabel)
 
         cols = use_columns
@@ -87,6 +87,6 @@ class data_reader:
 
 
 def read_dataset(train_test_files, use_columns, output_file_name, verbose):
-    print('[Reading ZIM] ...')
+    CONSOLE.print('[Reading ZIM] ...', style='bold green')
     data_reader(train_test_files, use_columns, output_file_name, verbose)
-    print('[Reading ZIM] : DONE')
+    CONSOLE.print('[Reading ZIM] : DONE', style='bold green')

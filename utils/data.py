@@ -6,13 +6,17 @@ from preprocess.pamap2.data_loader import get_pamap2_data
 from preprocess.skoda.data_loader import get_skoda_data
 from preprocess.uschad.data_loader import get_uschad_data
 from preprocess.zim_dance.data_loader import get_zim_data
+from rich.console import Console
+
+
+CONSOLE = Console()
 
 sys.path.append('../')
 warnings.filterwarnings('ignore')
 
 
 def get_data(dataset: str):
-    print(f'[Loading {dataset} data]')
+    CONSOLE.print(f'[Loading {dataset} data]', style='bold green')
 
     if dataset == 'pamap2':
         (train_x, train_y), (val_x, val_y), (test_x, test_y), y_test = get_pamap2_data()

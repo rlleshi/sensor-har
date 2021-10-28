@@ -1,8 +1,8 @@
 import os
 import argparse
 import warnings
-
 import yaml
+import tensorflow as tf
 
 from utils.data import get_data
 from utils.result import generate_result
@@ -49,6 +49,10 @@ def main():
     if not args.use_gpu:
         CONSOLE.print('Not using GPU', style='bold yellow')
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+    else:
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
 
     model_config_file = open('configs/model.yaml', mode='r')
     model_cfg = yaml.load(model_config_file, Loader=yaml.FullLoader)
