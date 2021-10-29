@@ -15,11 +15,10 @@ def parse_args():
         '--dataset',
         type=str,
         default='zim',
-        choices=['zim'],
+        choices=['zim', 'pamap2'],
         help='dataset')
     args = parser.parse_args()
     return args
-
 
 
 def main():
@@ -27,7 +26,11 @@ def main():
     config_file = open('configs/data.yaml', 'r')
     data_config = yaml.load(config_file, Loader=yaml.FullLoader)
     config = data_config[args.dataset]
-    path = osp.join(data_config['data_dir']['raw'], args.dataset, 'merged')
+    if args.dataset == 'zim':
+        path = osp.join(data_config['data_dir']['raw'], args.dataset, 'merged')
+    elif args.dataset == 'pamap2':
+        path = osp.join(data_config['data_dir']['raw'], args.dataset,
+                        'PAMAP2_Dataset', 'Protocol')
 
     result = {'train_files': 0, 'validation_files': 0, 'test_files': 0}
     for key in result.keys():

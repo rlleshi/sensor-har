@@ -9,7 +9,7 @@ training:
 zim:
   batch_size: 128
   d_model: 128
-  dropout: 0.2
+  dropout: 0.1
   n_head: 4
 
 pamap2:

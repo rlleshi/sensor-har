@@ -7,6 +7,7 @@ def windowz(data, size, use_overlap=True):
     while start < len(data):
         yield start, start + size
         if use_overlap:
+            # TODO: experiment with overlap
             start += (size // 2)
         else:
             start += size

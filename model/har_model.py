@@ -52,9 +52,9 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
 
     inputs = tf.keras.layers.Input(shape=(n_timesteps, n_features,))
 
-    si, _ = SensorAttention(n_filters=256, kernel_size=5, dilation_rate=2)(inputs)
+    # si, _ = SensorAttention(n_filters=256, kernel_size=5, dilation_rate=2)(inputs)
 
-    x = tf.keras.layers.Conv1D(d_model, 1, activation='relu')(si)
+    x = tf.keras.layers.Conv1D(d_model, 1, activation='relu')(inputs)
 
     if use_pe:
         x = PositionalEncoding(n_timesteps, d_model, dropout_rate)(x)
@@ -69,9 +69,9 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
     # x = tf.keras.layers.GlobalAveragePooling1D()(x)
 
     x = AttentionWithContext()(x)
-    # x = tf.keras.layers.Flatten()(x)
-    x = tf.keras.layers.Dense(n_outputs * 4, activation='relu')(x)
-    x = tf.keras.layers.Dropout(dropout_rate)(x)
+    x = tf.keras.layers.Flatten()(x)
+    # x = tf.keras.layers.Dense(n_outputs * 4, activation='relu')(x)
+    # x = tf.keras.layers.Dropout(dropout_rate)(x)
     # x = tf.keras.layers.Dense(128, activation='relu') (x)
 
     predictions = tf.keras.layers.Dense(n_outputs, activation='softmax')(x)

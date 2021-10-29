@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 sys.path.append("../")
 
 
-def train_model(dataset: str, model_config, train_x, train_y, val_x, val_y, epochs, save_model=True):
+def train_model(dataset: str, model_config, train_x, train_y, val_x, val_y, epochs, save_model):
     n_timesteps, n_features, n_outputs = train_x.shape[1], train_x.shape[2], train_y.shape[1]
 
     model = create_model(

@@ -40,6 +40,10 @@ def parse_args():
         '--use-gpu',
         action='store_true',
         help='whether to use GPU or not')
+    parser.add_argument(
+        '--save',
+        action='store_true',
+        help='whether to save the model or not')
     args = parser.parse_args()
     return args
 
@@ -64,12 +68,14 @@ def main():
                     model_config=model_cfg,
                     train_x=train_x, train_y=train_y,
                     val_x=val_x, val_y=val_y,
-                    epochs=args.epochs)
+                    epochs=args.epochs, save_model=args.save)
 
     if args.test:
         CONSOLE.print('\n[MODEL INFERENCE]', style='bold green')
-        pred = test_model(dataset=args.dataset, model_config=model_cfg, test_x=test_x)
-        generate_result(dataset=args.dataset, ground_truth=test_y, prediction=pred)
+        pred = test_model(dataset=args.dataset, model_config=model_cfg,
+                          test_x=test_x)
+        generate_result(dataset=args.dataset, ground_truth=test_y,
+                        prediction=pred)
 
 
 if __name__ == '__main__':

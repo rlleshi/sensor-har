@@ -30,8 +30,10 @@ class data_reader:
 
 
     def normalize(self, x):
-        "Min-Max normalization"
-        min_val, max_val = -1, 1
+        """Min-Max normalization.
+           Values taken from data_proc.yaml"""
+        # min_val, max_val = -1, 1
+        min_val, max_val = 63, 177
         return (x - min_val) / (max_val - min_val)
 
 
@@ -72,13 +74,24 @@ class data_reader:
         data = []
         labels = []
         for _, filename in enumerate(filelist):
-            # print('Reading file %d of %d' % (i + 1, len(filelist)))
             with open(osp.join(self.DATA_PATH, filename), 'r') as f:
                 reader = csv.reader(f, delimiter=' ')
+                former_cls, count = 99, 0
                 for line in reader:
+                    if (former_cls != line[0]) & (former_cls != 99):
+                        for i in range(count, 0, -1):
+                            data[len(data)-i][-1] = float(self.normalize(count)) / 10
+                        count = 0
+                    else:
+                        count += 1
+                    former_cls = line[0]
+
                     elem = []
                     for ind in cols:
-                        elem.append(line[ind])
+                        if ind == 7:
+                            elem.append(self.normalize(count))
+                        else:
+                            elem.append(line[ind])
 
                     data.append([float(x) / 10 for x in elem[1:]])
                     labels.append(labelToId[elem[0]])
