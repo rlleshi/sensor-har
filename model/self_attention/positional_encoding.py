@@ -21,7 +21,8 @@ class PositionalEncoding(tf.keras.layers.Layer):
         https://medium.com/@j.ali.hab/on-positional-encodings-in-the-attention-mechanism-ee81e6076b62
     """
 
-    def __init__(self, position, d_model, include_dropout = True, dropout_rate=0.2):
+    def __init__(self, position, d_model,
+                 dropout_rate=0.2, include_dropout=True):
         super(PositionalEncoding, self).__init__()
         self.d_model = d_model
         self.pos_encoding = self.positional_encoding(position, d_model)

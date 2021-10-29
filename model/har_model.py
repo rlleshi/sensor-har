@@ -10,7 +10,14 @@ CONSOLE = Console()
 
 
 def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4, dropout_rate=0.2, use_pe=True):
-    """ This is a self-attention based model. It utilizes sensor modality
+    """ The idea of this paper is that sensor's data samples are equivalent
+        to words and windows (time windows) are analogous to sentence.
+        Hence the use of attention & transformers for the paper.
+        The purpose has been to build an attention based end-to-end
+        system where attention is utilized in different ways to create
+        effective feature representation for sensor data.
+
+        This is a self-attention based model. It utilizes sensor modality
         attention, self-attention blocks and global temporal attention.
 
         The input is a time-window of sensor values. First it applies sensor
@@ -50,17 +57,21 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
     x = tf.keras.layers.Conv1D(d_model, 1, activation='relu')(si)
 
     if use_pe:
-        x = PositionalEncoding(n_timesteps, d_model)(x)
+        x = PositionalEncoding(n_timesteps, d_model, dropout_rate)(x)
 
     # add self-attention layers
-    x = EncoderLayer(d_model=d_model, num_heads=nh, dff=_dff, rate=dropout_rate)(x)
-    x = EncoderLayer(d_model=d_model, num_heads=nh, dff=_dff, rate=dropout_rate)(x)
+    x = EncoderLayer(
+        d_model=d_model, num_heads=nh,
+        dff=_dff, rate=dropout_rate)(x)
+    x = EncoderLayer(
+        d_model=d_model, num_heads=nh,
+        dff=_dff, rate=dropout_rate)(x)
     # x = tf.keras.layers.GlobalAveragePooling1D()(x)
 
     x = AttentionWithContext()(x)
     # x = tf.keras.layers.Flatten()(x)
     x = tf.keras.layers.Dense(n_outputs * 4, activation='relu')(x)
-    x = tf.keras.layers.Dropout(0.2)(x)
+    x = tf.keras.layers.Dropout(dropout_rate)(x)
     # x = tf.keras.layers.Dense(128, activation='relu') (x)
 
     predictions = tf.keras.layers.Dense(n_outputs, activation='softmax')(x)

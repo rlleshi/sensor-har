@@ -31,7 +31,7 @@ def parse_args():
     parser.add_argument(
         '--sensor-type',
         type=str,
-        default='both',
+        default='acc',
         choices=['both', 'acc', 'gyro'],
         help='type of sensor to plot')
     parser.add_argument(
