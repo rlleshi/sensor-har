@@ -16,6 +16,7 @@
 | No |      49|        128|4      | 99.73\% |     88.29\%    |       67\% |   38    |  0.1 | add(Flatten), remove(Dense + dropout) |
 | No |      49|        128|4      | 96.26\% |     88.62\%    |       70\% |   47    |  0.2 | length as feature |
 | No |      49|        128|4      | 98.02\% |     89.63\%    |       72\% |   62    |  0.1 | length as feature |
+| No |      49|        128|4      | 99.85\% |    88.57\%    |       79\% |   54    |  0.1 | max length as feature; remove sensor attention; add(Flatten), remove(Dense + dropout)|
 | No |      49|        128|4      | 99.26\%** |    90.07\%    |       72\% |   48    |  0.1 | length as feature; add(Flatten), remove(Dense + dropout)|
 | No |      49|        128|4      | 99.89\% |     88.62\%    |       68\% |   67    |  0.1 |
 | No |      49|        128|4      | 98.63\% |87.11\%| 70\% |   68    |
