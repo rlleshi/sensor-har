@@ -1,5 +1,6 @@
 import csv
 import os.path as osp
+import yaml
 
 import h5py
 import matplotlib.pyplot as plt
@@ -16,10 +17,12 @@ class data_reader:
     DATA_PATH = 'data/raw/zim/merged/'
 
     def __init__(self, train_test_files, use_columns, output_file_name, verbose):
+        # self.data_config = yaml.load(
+        #     open('configs/data_proc.yaml', 'r'),
+        #     Loader=yaml.FullLoader)['zim']
         if not osp.exists(output_file_name):
             self.data, self.idToLabel = self.read_zim(train_test_files, use_columns, verbose)
             self.save_data(output_file_name)
-
 
     def save_data(self, output_file_name):
         with h5py.File(output_file_name, 'w') as f:
@@ -28,24 +31,21 @@ class data_reader:
                 for field in self.data[key]:
                     f[key].create_dataset(field, data=self.data[key][field])
 
-
     def normalize(self, x):
         """Min-Max normalization.
            Values taken from data_proc.yaml"""
         # min_val, max_val = -1, 1
-        min_val, max_val = 63, 177
+        # values taken globally from data_proc.yaml
+        min_val, max_val = 71, 179
         return (x - min_val) / (max_val - min_val)
-
 
     @property
     def train(self):
         return self.data['train']
 
-
     @property
     def test(self):
         return self.data['test']
-
 
     def read_zim(self, train_test_files, use_columns, verbose):
         files = train_test_files

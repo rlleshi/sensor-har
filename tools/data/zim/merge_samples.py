@@ -11,6 +11,7 @@ from rich.console import Console
 
 LABEL_TO_NUMBER = {}
 CONSOLE = Console()
+TOLERANCE = 3
 
 
 def clean(str):
@@ -29,7 +30,7 @@ def parse_args():
     parser.add_argument(
         '--ann',
         type=str,
-        default='data/annotations/zim-dance-10.txt',
+        default='data/annotations/zim-dance-valse.txt',
         help='annotation file')
     args = parser.parse_args()
     return args
@@ -60,7 +61,7 @@ def main():
             content = json.load(content)
 
             lower_b, upper_b = data_config[f'class_{activity_id}']
-            if (len(content) < lower_b) | (len(content) > upper_b):
+            if (len(content)+TOLERANCE < lower_b) | (len(content)-TOLERANCE > upper_b):
                 CONSOLE.print(f'Skipping {file} with len {len(content)}',
                     f'Out of Bounds {lower_b} - {upper_b}', style='yellow')
                 skip_count += 1

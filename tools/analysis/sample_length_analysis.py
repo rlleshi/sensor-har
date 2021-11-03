@@ -94,6 +94,7 @@ def main():
                 result[length] += 1
 
         save_result(osp.join(out_dir, label), result, label)
+    CONSOLE.print('Saved plots', style='green')
 
 
 if __name__ == '__main__':

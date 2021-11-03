@@ -84,6 +84,7 @@ def main():
     movement = '-'.join(movement[i] for i in range(0, 5))
     output.savefig(osp.join(args.out_dir,
         f'{movement}_{args.sensor_type}_{person}_{gen_id(3)}.svg'))
+    CONSOLE.print('Saved plot', style='green')
 
 if __name__ == '__main__':
     main()

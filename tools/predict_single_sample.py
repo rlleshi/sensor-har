@@ -37,6 +37,14 @@ def clean(str):
     return str.replace('_', ' ').lower()
 
 
+def normalize(x):
+    """Min-Max normalization.
+        Values taken from data_proc.yaml"""
+    # min_val, max_val = -1, 1
+    min_val, max_val = 71, 179
+    return (x - min_val) / (max_val - min_val)
+
+
 def parse_args():
     parser = ArgumentParser(prog='get prediction for single sample')
     parser.add_argument(
@@ -51,7 +59,7 @@ def parse_args():
     parser.add_argument(
         '--ann',
         type=str,
-        default='data/annotations/zim-dance-10.txt',
+        default='data/annotations/zim-dance-valse.txt',
         help='annotation file')
     parser.add_argument(
         '--out-dir',
@@ -101,14 +109,12 @@ def main():
         y_test = []
 
         content = open(osp.join(args.path, sample), 'r')
-        try:
-            content = json.load(content)
-        except:
-            continue
+        content = json.load(content)
 
         for row in content:
             result = [activity_id]
             result.extend([x for x in row])
+            result.append(normalize(len(content)) / 10)
             x_test.append([float(x) / 10 for x in result[1:]])
             y_test.append(result[0])
 
@@ -119,8 +125,12 @@ def main():
             np.ma.array(x_test, mask=np.isnan(x_test)).mean(axis=0), x_test)
 
         # window
-        test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
-        test_y = tf.keras.utils.to_categorical(test_y)
+        try:
+            test_x, test_y = segment_window_all(x_test, y_test, config['window_size'], n_sensor_val)
+            test_y = tf.keras.utils.to_categorical(test_y)
+        except ValueError as e:
+            CONSOLE.print(f'Error {e}. Could not predict sample {sample}', style='red')
+            continue
 
         # predict
         pred = model.predict(
@@ -131,9 +141,9 @@ def main():
             np.argmax(test_y, axis=1),
             np.argmax(pred, axis=1),
             normalize=True)
-        print(sample)
+        CONSOLE.print(sample, style='green')
         CONSOLE.print(f'The model is {round(100*acc, 2)}% confident '
-                    f'that this sample is {label}', style='green')
+                      f'that this sample is {label}', style='green')
 
 
 if __name__ == '__main__':

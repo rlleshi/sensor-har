@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument(
         '--ann',
         type=str,
-        default='data/annotations/zim-dance-10.txt',
+        default='data/annotations/zim-dance-valse.txt',
         help='annotation file')
     parser.add_argument(
         '--dataset',

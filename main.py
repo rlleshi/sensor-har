@@ -35,6 +35,7 @@ def parse_args():
         '--dataset',
         default='zim',
         type=str,
+        choices=['zim', 'pamap2', 'opp', 'skoda', 'uschad'],
         help='Name of Dataset for Model Training')
     parser.add_argument(
         '--use-gpu',

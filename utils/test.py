@@ -17,7 +17,8 @@ def test_model(dataset: str, model_config, test_x):
         model = tf.keras.models.load_model(
             osp.join(model_config['dirs']['saved_models'], dataset))
     else:
-        print('PLEASE, TRAIN THE MODEL FIRST OR PUT PRETRAINED MODEL IN "saved_model" DIRECTORY')
+        CONSOLE.print('Model could not be found @"saved_model" directory',
+                      style='red')
         return
 
     # CONSOLE.log(model_config[dataset]['batch_size'])
