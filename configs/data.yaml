@@ -41,10 +41,10 @@ skoda:
 zim:
   source: null
   destination: zim_dance.zip
-  train_files: [ 'teacher01.dat',  'subject05.dat', 'teacher03.dat', 'subject01.dat', 'subject02.dat', 'subject03.dat', 'subject04_1.dat', 'subject04_2.dat', 'subject08.dat', 'subject09.dat', 'subject10.dat' ]
+  train_files: [ 'teacher01.dat', 'teacher03.dat', 'subject01.dat', 'subject02.dat', 'subject03.dat', 'subject04_1.dat', 'subject04_2.dat', 'subject05.dat', 'subject08.dat', 'subject09.dat', 'subject10.dat' ]
   validation_files: [  'subject06.dat', 'subject11.dat']
   test_files: [  'teacher02.dat',  'subject07_1.dat', 'subject07_2.dat',]
   output_file: 'zim_dance.h5'
   feature_columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-  window_size: 32
+  window_size: 22
   verbose: False
