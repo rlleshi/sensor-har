@@ -31,7 +31,9 @@ def get_zim_data():
                  output_file_name=osp.join(
                     data_config['data_dir']['processed'],
                     config['output_file']),
-                 verbose=config['verbose'])
+                 verbose=config['verbose'],
+                 use_length=config['use_length'],
+                 use_stats=config['use_stats'])
 
     path = osp.join(
         data_config['data_dir']['processed'],

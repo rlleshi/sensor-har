@@ -61,7 +61,8 @@ def main():
 
     model_config_file = open('configs/model.yaml', mode='r')
     model_cfg = yaml.load(model_config_file, Loader=yaml.FullLoader)
-    train_x, train_y, val_x, val_y, test_x, test_y = get_data(dataset=args.dataset)
+    train_x, train_y, val_x, val_y, test_x, test_y = get_data(
+                                            dataset=args.dataset)
 
     if args.train:
         CONSOLE.print('\n[MODEL TRAINING]', style='bold green')

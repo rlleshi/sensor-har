@@ -69,6 +69,7 @@ def create_model(n_timesteps, n_features, n_outputs, _dff=512, d_model=128, nh=4
     # x = tf.keras.layers.GlobalAveragePooling1D()(x)
 
     x = AttentionWithContext()(x)
+    # x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Flatten()(x)
     # x = tf.keras.layers.Dense(n_outputs * 4, activation='relu')(x)
     # x = tf.keras.layers.Dropout(dropout_rate)(x)

@@ -45,6 +45,8 @@ zim:
   validation_files: [  'subject06.dat', 'subject11.dat']
   test_files: [  'teacher02.dat',  'subject07_1.dat', 'subject07_2.dat',]
   output_file: 'zim_dance.h5'
-  feature_columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+  feature_columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 ]
+  use_length: False
+  use_stats: True
   window_size: 22
   verbose: False
