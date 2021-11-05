@@ -40,7 +40,6 @@ def clean(str):
 def normalize(x):
     """Min-Max normalization.
         Values taken from data_proc.yaml"""
-    # min_val, max_val = -1, 1
     min_val, max_val = 71, 179
     return (x - min_val) / (max_val - min_val)
 
@@ -72,11 +71,10 @@ def parse_args():
 
 def main():
     args = parse_args()
-    # tf.get_logger().setLevel('INFO')
-    # tf.autograph.set_verbosity(0)
     gpus = tf.config.experimental.list_physical_devices('GPU')
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
+
     Path(args.out_dir).mkdir(parents=True, exist_ok=True)
     config_file = open('configs/data.yaml', 'r')
     data_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -99,10 +97,14 @@ def main():
         to_process.append(args.path.split('/')[-1])
         args.path = '/'.join(p for p in args.path.split('/')[:-1])
 
-    # CONSOLE.print(to_process, style='green')
-    # CONSOLE.print(args.path, style='green')
+    sensors = ['acc_x', 'acc_y', 'acc_z', 'gy_x', 'gy_y', 'gy_z']
+    ind_to_sensor = {i: sensor for i, sensor in enumerate(sensors)}
 
     for sample in to_process:
+        if not sample.endswith('.json'):
+            continue
+
+        sensor_data = {k: [] for k in sensors}
         label = clean(sample.split('2021')[0])
         activity_id = label_to_number.get(label.strip(), None)
         x_test = []
@@ -112,9 +114,24 @@ def main():
         content = json.load(content)
 
         for row in content:
+            for i in range(len(sensors)):
+                sensor_data[ind_to_sensor[i]].append(row[i])
+
+        stat_data = []
+        for sensor in sensors:
+            stat_data.append(np.mean(sensor_data[sensor]))
+            stat_data.append(np.std(sensor_data[sensor]))
+            stat_data.append(np.mean(
+                np.percentile(sensor_data[sensor], list(range(35, 45)))))
+            stat_data.append(np.mean(
+                np.percentile(sensor_data[sensor], list(range(65, 75)))))
+
+        for row in content:
             result = [activity_id]
             result.extend([x for x in row])
-            result.append(normalize(len(content)) / 10)
+            # result.append(normalize(len(content)) / 10)
+            for st in stat_data:
+                result.append(st)
             x_test.append([float(x) / 10 for x in result[1:]])
             y_test.append(result[0])
 
@@ -143,7 +160,7 @@ def main():
             normalize=True)
         CONSOLE.print(sample, style='green')
         CONSOLE.print(f'The model is {round(100*acc, 2)}% confident '
-                      f'that this sample is {label}', style='green')
+                      f'that the sample {sample} is {label}', style='green')
 
 
 if __name__ == '__main__':

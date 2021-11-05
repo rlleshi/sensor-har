@@ -100,29 +100,31 @@ class data_reader:
                             for i in range(count, 0, -1):
                                 if self.use_length:
                                     j, balancer = 7, 6
-                                    limit = 19 + 6
+                                    limit = 19
                                 else:
                                     j, balancer = 6, 5
-                                    limit = 18 + 6
+                                    limit = 18
                                 while j < limit:
-                                    mean = np.mean(sensor_data[self.ind_to_sensor[j-balancer]]) / 10
-                                    std = np.std(sensor_data[self.ind_to_sensor[j-balancer]]) / 10
+                                    mean = np.mean(
+                                        sensor_data[self.ind_to_sensor[j-balancer]]) / 10
+                                    std = np.std(
+                                        sensor_data[self.ind_to_sensor[j-balancer]]) / 10
                                     # p_25 = np.mean(np.percentile(sensor_data[self.ind_to_sensor[j-balancer]], list(range(23, 28)))) / 10
                                     # mode = stats.mode([round(sd, 2) for sd in sensor_data[self.ind_to_sensor[j-balancer]]])[0][0] / 10
-                                    p_50 = np.mean(np.percentile(sensor_data[self.ind_to_sensor[j-balancer]], list(range(45, 55)))) / 10
-                                    # p_75 = np.mean(np.percentile(sensor_data[self.ind_to_sensor[j-balancer]], list(range(70, 80)))) / 10
+                                    # p_50 = np.mean(np.percentile(sensor_data[self.ind_to_sensor[j-balancer]], list(range(35, 45)))) / 10
+                                    # p_75 = np.mean(np.percentile(sensor_data[self.ind_to_sensor[j-balancer]], list(range(65, 75)))) / 10
 
                                     data[len(data)-i][j] = mean
                                     j += 1
                                     data[len(data)-i][j] = std
                                     j += 1
-                                    data[len(data)-i][j] = p_50
-                                    j += 1
+                                    # data[len(data)-i][j] = p_50
+                                    # j += 1
                                     # data[len(data)-i][j] = mode
                                     # j += 1
                                     # data[len(data)-i][j] = p_75
                                     # j += 1
-                                    balancer += 2
+                                    balancer += 1
 
                         # CONSOLE.print(f'================================================================ After', style='bold yellow')
                         # for i in range(count, 0, -1):

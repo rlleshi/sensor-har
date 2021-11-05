@@ -47,31 +47,26 @@ def main():
     args = parse_args()
     Path(args.out_dir).mkdir(parents=True, exist_ok=True)
     if args.sensor_type == 'both':
-        ind = list(range(0, 6))
+        sensors = ['acc_x', 'acc_y', 'acc_z', 'gy_x', 'gy_y', 'gy_z']
+        balancer = 0
     elif args.sensor_type == 'acc':
-        ind = list(range(0, 3))
+        sensors = ['acc_x', 'acc_y', 'acc_z']
+        balancer = 0
     else:
-        ind = list(range(3, 6))
-
+        sensors = ['gy_x', 'gy_y', 'gy_z']
+        balancer = 3
+    ind_to_sensor = {i+balancer: sensor for i, sensor in enumerate(sensors)}
     content = json.load(open(args.sample, 'r'))
-    results = {k: [] for k in ['acc_x', 'acc_y', 'acc_z', 'gy_x', 'gy_y', 'gy_z']}
+    results = {k: [] for k in sensors}
+
     palette = ['Reds', 'Blues', 'Greys', 'Oranges', 'Purples', 'Greens']
 
     for row in content:
-        results['acc_x'].append(row[0])
-        results['acc_y'].append(row[1])
-        results['acc_z'].append(row[2])
-        results['gy_x'].append(row[3])
-        results['gy_y'].append(row[4])
-        results['gy_z'].append(row[5])
+        for i in range(len(sensors)):
+            results[ind_to_sensor[i+balancer]].append(row[i+balancer])
 
     sns.set(rc={'figure.figsize': (15, 13)})
-    i = -1
-    for k in results.keys():
-        i += 1
-        if i not in ind:
-            continue
-
+    for i, k in enumerate(results.keys()):
         df = pd.DataFrame({'Sample Index': list(range(0, len(results[k]))),
                     'Sensor Reading': results[k], 'Sensor': k})
         fig = sns.lineplot(x='Sample Index', y='Sensor Reading', data=df, hue='Sensor', palette=palette[i])
@@ -83,8 +78,9 @@ def main():
     movement = clean(movement).split(' ')
     movement = '-'.join(movement[i] for i in range(0, 5))
     output.savefig(osp.join(args.out_dir,
-        f'{movement}_{args.sensor_type}_{person}_{gen_id(3)}.svg'))
+        f'{movement}_{args.sensor_type}_{person}_{gen_id(3)}.svg'), bbox_inches='tight')
     CONSOLE.print('Saved plot', style='green')
+
 
 if __name__ == '__main__':
     main()
