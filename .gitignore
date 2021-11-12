@@ -135,6 +135,7 @@ dmypy.json
 # data
 data/processed/
 data/raw/
+data/extract_features/
 
 # models
 # saved_model/zim/

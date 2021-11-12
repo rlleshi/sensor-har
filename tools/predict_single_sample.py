@@ -121,17 +121,17 @@ def main():
         for sensor in sensors:
             stat_data.append(np.mean(sensor_data[sensor]))
             stat_data.append(np.std(sensor_data[sensor]))
-            stat_data.append(np.mean(
-                np.percentile(sensor_data[sensor], list(range(35, 45)))))
-            stat_data.append(np.mean(
-                np.percentile(sensor_data[sensor], list(range(65, 75)))))
+            # stat_data.append(np.mean(
+            #     np.percentile(sensor_data[sensor], list(range(35, 45)))))
+            # stat_data.append(np.mean(
+            #     np.percentile(sensor_data[sensor], list(range(65, 75)))))
 
         for row in content:
             result = [activity_id]
             result.extend([x for x in row])
-            # result.append(normalize(len(content)) / 10)
-            for st in stat_data:
-                result.append(st)
+            result.append(normalize(len(content)) / 10)
+            # for st in stat_data:
+            #     result.append(st)
             x_test.append([float(x) / 10 for x in result[1:]])
             y_test.append(result[0])
 
@@ -158,6 +158,11 @@ def main():
             np.argmax(test_y, axis=1),
             np.argmax(pred, axis=1),
             normalize=True)
+        # print(test_y)
+        # print(np.argmax(test_y, axis=1))
+        # print()
+        # print(pred)
+        # print(np.argmax(pred, axis=1))
         CONSOLE.print(sample, style='green')
         CONSOLE.print(f'The model is {round(100*acc, 2)}% confident '
                       f'that the sample {sample} is {label}', style='green')
