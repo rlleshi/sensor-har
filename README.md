@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ## Pretrained Models
 
-The `saved_model` directory contains pretrained models for `PAMAP2`, `Opportuninty`, `USC-HAD` and `Skoda` dataset.
+The `saved_model` directory contains pretrained models for various feature sets (apart from sensor data). It was found that feeding the length of each sample, as well as basic statistics such as mean and std. significatly boosted the accuracy. Three different such models could be found here.
 These models can be used directly for inference and performance evaluation as described in the following section.
 
 ## Training and Evaluation
@@ -55,7 +55,9 @@ If the pretrained weights are stored in `saved_model` directory and to infer wit
 TF_CPP_MIN_LOG_LEVEL=3 python main.py --test --dataset pamap2
 ```
 
-## References
+Make sure to tune the `feature_columes` in `config/data.yaml` accordingly
+
+### References
 
 [24th European Conference on Artificial Intelligence, ECAI 2020](https://digital.ecai2020.eu/)
 by [Saif Mahmud](https://saif-mahmud.github.io/) and M. Tanjid Hasan Tonmoy et al.
